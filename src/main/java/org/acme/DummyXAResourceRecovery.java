@@ -24,10 +24,12 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.transaction.xa.XAResource;
+import javax.transaction.xa.Xid;
 
 import io.quarkus.runtime.Startup;
 import jakarta.annotation.PostConstruct;
 import jakarta.inject.Inject;
+import jakarta.resource.spi.XATerminator;
 import org.jboss.logging.Logger;
 import org.jboss.tm.XAResourceRecovery;
 import org.jboss.tm.XAResourceRecoveryRegistry;
@@ -42,11 +44,17 @@ public class DummyXAResourceRecovery implements XAResourceRecovery {
 
     @Inject
     XAResourceRecoveryRegistry xaResourceRecoveryRegistry;
+    
+    @Inject
+    XATerminator xaTerminator;
 
     @PostConstruct
-    void init() {
+    void init() throws Exception {
         LOG.info("register DummyXAResourceRecovery");
         xaResourceRecoveryRegistry.addXAResourceRecovery(this);
+        Xid[] xids = xaTerminator.recover(XAResource.TMSTARTRSCAN);
+        int size = xids != null ? xids.length : 0;
+        LOG.info("xaTerminator returns: Xid size is " + size);
     }
 
     @Override

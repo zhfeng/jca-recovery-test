@@ -5,6 +5,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Alternative;
 import jakarta.resource.spi.work.Work;
 import jakarta.resource.spi.work.WorkCompletedException;
+import org.jboss.logging.Logger;
 import org.jboss.tm.JBossXATerminator;
 
 import javax.transaction.xa.XAException;
@@ -14,6 +15,7 @@ import javax.transaction.xa.Xid;
 @Alternative
 @Priority(Integer.MAX_VALUE)
 public class NoOPXATerminator implements JBossXATerminator {
+    private Logger LOG = Logger.getLogger(NoOPXATerminator.class);
     @Override
     public void registerWork(final Work work, final Xid xid, final long timeout) throws WorkCompletedException {
     
@@ -51,7 +53,7 @@ public class NoOPXATerminator implements JBossXATerminator {
     
     @Override
     public Xid[] recover(final int flag) throws XAException {
-        System.out.println(NoOPXATerminator.class);
+        LOG.info(NoOPXATerminator.class + " running recover()");
         return new Xid[0];
     }
     

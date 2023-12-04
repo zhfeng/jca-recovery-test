@@ -40,7 +40,7 @@
     <dependency>
       <groupId>io.quarkiverse.ironjacamar</groupId>
       <artifactId>quarkus-ironjacamar</artifactId>
-      <version>999-SNAPSHOT</version>
+      <version>1.1.0</version>
     </dependency>
     <dependency>
       <groupId>org.apache.activemq</groupId>
